@@ -5,56 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rohit's Gaming Zone</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            background: #1e1e2e;
-            color: white;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 { color: #ff007f; margin-bottom: 5px; }
-        .subtitle { color: #aaa; margin-bottom: 25px; }
-        .menu { margin-bottom: 30px; }
-        .btn {
-            background: #00ffff;
-            color: #1e1e2e;
-            border: none;
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 10px;
-            cursor: pointer;
-            border-radius: 25px;
-            transition: 0.3s;
-            box-shadow: 0 4px #00bfff;
-        }
-        .btn:hover { background: #ff007f; color: white; transform: translateY(-2px); }
-        .game-section {
-            display: none;
-            background: #252538;
-            padding: 20px;
-            border-radius: 15px;
-            max-width: 400px;
-            margin: 20px auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-        /* Tic Tac Toe Style */
+        body { font-family: sans-serif; text-align: center; background: #1e1e2e; color: white; margin: 0; padding: 20px; }
+        h1 { color: #ff007f; }
+        .menu { margin-bottom: 25px; }
+        .btn { background: #00ffff; color: #1e1e2e; border: none; padding: 12px 25px; font-size: 16px; font-weight: bold; margin: 8px; cursor: pointer; border-radius: 25px; box-shadow: 0 4px #00bfff; }
+        .btn:hover { background: #ff007f; color: white; }
+        .game-section { display: none; background: #252538; padding: 20px; border-radius: 15px; max-width: 400px; margin: 20px auto; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .board { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; justify-content: center; margin-top: 15px; }
         .cell { width: 100px; height: 100px; background: #333; font-size: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 8px; font-weight: bold; }
-        .cell:hover { background: #444; }
-        #print { font-size: 20px; font-weight: bold; margin-top: 15px; color: #00ffff; }
-        /* Canvas Style */
         canvas { background: #000; display: block; margin: 15px auto; border: 2px solid #00ffff; }
-        /* Guess Style */
-        input { padding: 10px; font-size: 16px; width: 80px; text-align: center; border-radius: 5px; border: none; outline: none; }
-        #guessResult { font-size: 18px; margin-top: 15px; font-weight: bold; }
+        input { padding: 10px; font-size: 16px; width: 80px; text-align: center; border-radius: 5px; border: none; }
     </style>
 </head>
 <body>
 
     <h1>🎮 Rohit's Gaming Zone 🎮</h1>
-    <p class="subtitle">नीचे दिए गए बटन दबाकर गेम शुरू करें:</p>
+    <p>नीचे दिए गए बटन दबाकर गेम शुरू करें:</p>
 
     <div class="menu">
         <button class="btn" onclick="showGame('game1')">Tic-Tac-Toe</button>
@@ -63,144 +29,118 @@
         <button class="btn" onclick="showGame('game4')">🏎️ Car Game</button>
     </div>
 
-    <!-- GAME 1: TIC TAC TOE -->
+    <!-- 1. TIC TAC TOE -->
     <div id="game1" class="game-section">
         <h2>Tic-Tac-Toe</h2>
         <div class="board">
-            <div class="cell" onclick="makeMove(this, 0)"></div>
-            <div class="cell" onclick="makeMove(this, 1)"></div>
-            <div class="cell" onclick="makeMove(this, 2)"></div>
-            <div class="cell" onclick="makeMove(this, 3)"></div>
-            <div class="cell" onclick="makeMove(this, 4)"></div>
-            <div class="cell" onclick="makeMove(this, 5)"></div>
-            <div class="cell" onclick="makeMove(this, 6)"></div>
-            <div class="cell" onclick="makeMove(this, 7)"></div>
-            <div class="cell" onclick="makeMove(this, 8)"></div>
+            <div class="cell" onclick="makeMove(this,0)"></div><div class="cell" onclick="makeMove(this,1)"></div><div class="cell" onclick="makeMove(this,2)"></div>
+            <div class="cell" onclick="makeMove(this,3)"></div><div class="cell" onclick="makeMove(this,4)"></div><div class="cell" onclick="makeMove(this,5)"></div>
+            <div class="cell" onclick="makeMove(this,6)"></div><div class="cell" onclick="makeMove(this,7)"></div><div class="cell" onclick="makeMove(this,8)"></div>
         </div>
         <p id="print">बारी: X</p>
         <button class="btn" onclick="resetTic()">Reset Game</button>
     </div>
 
-    <!-- GAME 2: SNAKE GAME -->
+    <!-- 2. SNAKE GAME -->
     <div id="game2" class="game-section">
         <h2>Snake Game</h2>
-        <p>कीबोर्ड की <b>Arrow Keys (↑, ↓, ←, →)</b> से सांप को चलाएं</p>
+        <p>कीबोर्ड की <b>Arrow Keys</b> से सांप को चलाएं</p>
         <canvas id="stage" width="300" height="300"></canvas>
         <p id="snakeScore">स्कोर: 0</p>
     </div>
 
-    <!-- GAME 3: NUMBER GUESSING -->
+    <!-- 3. NUMBER GUESSING -->
     <div id="game3" class="game-section">
         <h2>Number Guess (1 से 20)</h2>
-        <p>1 से 20 के बीच का नंबर सोचें और अनुमान लगाएं:</p>
         <input type="number" id="guessInput" min="1" max="20" placeholder="0">
-        <br><br>
-        <button class="btn" onclick="checkGuess()">Check</button>
+        <br><br><button class="btn" onclick="checkGuess()">Check</button>
         <p id="guessResult"></p>
     </div>
 
-    <!-- GAME 4: CAR RACING GAME -->
+    <!-- 4. CAR RACING -->
     <div id="game4" class="game-section">
         <h2>🏎️ Car Racing Game</h2>
-        <p>कीबोर्ड की <b>Left (←) और Right (→)</b> कीज से कार को बचाएं!</p>
+        <p>कीबोर्ड की <b>← और → Keys</b> से कार को बचाएं!</p>
         <canvas id="carCanvas" width="300" height="400"></canvas>
         <p id="carScore">स्कोर: 0</p>
-        <button class="btn" onclick="initCarGame()">Restart Car Game</button>
+        <button class="btn" onclick="initCarGame()">Restart</button>
     </div>
 
     <script>
-        let snakeInterval;
-        let carInterval;
-
-        function showGame(gameId) {
+        let snakeInterval, carInterval;
+        function showGame(id) {
             document.querySelectorAll('.game-section').forEach(g => g.style.display = 'none');
-            let element = document.getElementById(gameId);
-            if(element) {
-                element.style.display = 'block';
-            }
-            
-            clearInterval(snakeInterval);
-            clearInterval(carInterval);
+            let el = document.getElementById(id); if(el) el.style.display = 'block';
+            clearInterval(snakeInterval); clearInterval(carInterval);
             document.removeEventListener('keydown', carControl);
-
-            if(gameId === 'game2') { initSnake(); }
-            if(gameId === 'game4') { initCarGame(); }
+            if(id === 'game2') initSnake(); if(id === 'game4') initCarGame();
         }
 
-        // --- 1. Tic Tac Toe Logic ---
-        let turn = 'X'; let cells = Array(9).fill(''); let gameActive = true;
-        function makeMove(el, num) {
-            if(cells[num] === '' && gameActive) {
-                cells[num] = turn; el.innerText = turn;
-                el.style.color = turn === 'X' ? '#00ffff' : '#ff007f';
-                if(checkWin()) { document.getElementById('print').innerText = "🎉 खिलाड़ी " + turn + " जीता!"; gameActive = false; return; }
-                if(!cells.includes('')) { document.getElementById('print').innerText = "🤝 मैच ड्रा हो गया!"; gameActive = false; return; }
+        // Tic Tac Toe
+        let turn = 'X', cells = Array(9).fill(''), gActive = true;
+        function makeMove(el, n) {
+            if(cells[n] === '' && gActive) {
+                cells[n] = turn; el.innerText = turn; el.style.color = turn === 'X' ? '#00ffff' : '#ff007f';
+                if([[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]].some(p => p.every(i => cells[i] === turn))) { document.getElementById('print').innerText = "🎉 " + turn + " जीता!"; gActive = false; return; }
+                if(!cells.includes('')) { document.getElementById('print').innerText = "🤝 ड्रा हो गया!"; gActive = false; return; }
                 turn = turn === 'X' ? 'O' : 'X'; document.getElementById('print').innerText = "बारी: " + turn;
             }
         }
-        function checkWin() {
-            const winPatterns = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            return winPatterns.some(p => p.every(i => cells[i] === turn));
-        }
-        function resetTic() { cells.fill(''); document.querySelectorAll('.cell').forEach(c => c.innerText = ''); turn = 'X'; gameActive = true; document.getElementById('print').innerText = "बारी: X"; }
+        function resetTic() { cells.fill(''); document.querySelectorAll('.cell').forEach(c => c.innerText = ''); turn = 'X'; gActive = true; document.getElementById('print').innerText = "बारी: X"; }
 
-        // --- 2. Snake Game Logic ---
-        let d = "RIGHT";
+        // Snake Game
+        let sd = "RIGHT";
         function initSnake() {
-            clearInterval(snakeInterval); d = "RIGHT";
+            clearInterval(snakeInterval); sd = "RIGHT";
             const canvas = document.getElementById('stage'); const ctx = canvas.getContext('2d'); const box = 15;
             let snake = [{x: 10 * box, y: 10 * box}]; let score = 0;
             let food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box };
             document.getElementById('snakeScore').innerText = "स्कोर: " + score;
-
-            document.removeEventListener('keydown', direction);
-            document.addEventListener('keydown', direction);
-            function direction(event) {
-                if(event.keyCode == 37 && d != "RIGHT") d = "LEFT";
-                else if(event.keyCode == 38 && d != "DOWN") d = "UP";
-                else if(event.keyCode == 39 && d != "LEFT") d = "RIGHT";
-                else if(event.keyCode == 40 && d != "UP") d = "DOWN";
+            document.removeEventListener('keydown', sDir); document.addEventListener('keydown', sDir);
+            function sDir(e) {
+                if(e.keyCode == 37 && sd != "RIGHT") sd = "LEFT"; else if(e.keyCode == 38 && sd != "DOWN") sd = "UP";
+                else if(e.keyCode == 39 && sd != "LEFT") sd = "RIGHT"; else if(e.keyCode == 40 && sd != "UP") sd = "DOWN";
             }
-
-            function draw() {
+            snakeInterval = setInterval(() => {
                 ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 300, 300);
-                for(let i = 0; i < snake.length; i++) { ctx.fillStyle = (i == 0) ? '#00ffff' : '#00bfff'; ctx.fillRect(snake[i].x, snake[i].y, box-1, box-1); }
+                for(let i=0; i<snake.length; i++) { ctx.fillStyle = (i==0) ? '#00ffff' : '#00bfff'; ctx.fillRect(snake[i].x, snake[i].y, box-1, box-1); }
                 ctx.fillStyle = 'red'; ctx.fillRect(food.x, food.y, box-1, box-1);
-                let snakeX = snake[0].x; let snakeY = snake[0].y;
-                if(d == "LEFT") snakeX -= box; if(d == "UP") snakeY -= box; if(d == "RIGHT") snakeX += box; if(d == "DOWN") snakeY += box;
-                if(snakeX == food.x && snakeY == food.y) { score++; document.getElementById('snakeScore').innerText = "स्कोर: " + score; food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box }; } else { snake.pop(); }
-                let newHead = { x: snakeX, y: snakeY };
-                if(snakeX < 0 || snakeY < 0 || snakeX >= 300 || snakeY >= 300 || snake.slice(1).some(s => s.x === newHead.x && s.y === newHead.y)) { clearInterval(snakeInterval); alert("Game Over! स्कोर: " + score); initSnake(); return; }
-                snake.unshift(newHead);
-            }
-            snakeInterval = setInterval(draw, 150);
+                let sX = snake[0].x, sY = snake[0].y;
+                if(sd == "LEFT") sX -= box; if(sd == "UP") sY -= box; if(sd == "RIGHT") sX += box; if(sd == "DOWN") sY += box;
+                if(sX == food.x && sY == food.y) { score++; document.getElementById('snakeScore').innerText = "स्कोर: " + score; food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box }; } else { snake.pop(); }
+                let head = { x: sX, y: sY };
+                if(sX < 0 || sY < 0 || sX >= 300 || sY >= 300 || snake.some(s => s.x === head.x && s.y === head.y)) { clearInterval(snakeInterval); alert("Game Over! स्कोर: " + score); initSnake(); return; }
+                snake.unshift(head);
+            }, 150);
         }
 
-        // --- 3. Guessing Game Logic ---
-        let secretNum = Math.floor(Math.random() * 20) + 1;
+        // Guessing Game
+        let sNum = Math.floor(Math.random() * 20) + 1;
         function checkGuess() {
-            let guess = document.getElementById('guessInput').value; let res = document.getElementById('guessResult');
-            if(!guess) { res.innerText = "कृपया नंबर डालें!"; res.style.color = "yellow"; return; }
-            if(guess == secretNum) { res.innerText = "🎉 सही जवाब!"; res.style.color = "#00ffff"; secretNum = Math.floor(Math.random() * 20) + 1; }
-            else if (guess > secretNum) { res.innerText = "📉 नंबर बहुत बड़ा है!"; res.style.color = "#ff007f"; }
-            else { res.innerText = "📈 नंबर बहुत छोटा है!"; res.style.color = "#ff007f"; }
+            let g = document.getElementById('guessInput').value; let r = document.getElementById('guessResult');
+            if(!g) { r.innerText = "नंबर डालें!"; return; }
+            if(g == sNum) { r.innerText = "🎉 सही जवाब!"; sNum = Math.floor(Math.random() * 20) + 1; }
+            else if (g > sNum) r.innerText = "📉 नंबर बहुत बड़ा है!"; else r.innerText = "📈 नंबर बहुत छोटा है!";
         }
 
-        // --- 4. Car Racing Game Logic ---
-        let playerCar = { x: 130, y: 320, w: 40, h: 60 };
-        let enemyCar = { x: 100, y: -60, w: 40, h: 60, speed: 5 };
-        let carScore = 0;
-
-        function carControl(e) {
-            if(e.keyCode == 37 && playerCar.x > 10) playerCar.x -= 20;
-            if(e.keyCode == 39 && playerCar.x < 250) playerCar.x += 20;
-        }
-
+        // Car Game
+        let pCar = { x: 130, y: 320, w: 40, h: 60 }, eCar = { x: 100, y: -60, w: 40, h: 60, speed: 5 }, cScore = 0;
+        function carControl(e) { if(e.keyCode == 37 && pCar.x > 10) pCar.x -= 20; if(e.keyCode == 39 && pCar.x < 250) pCar.x += 20; }
         function initCarGame() {
-            clearInterval(carInterval);
-            playerCar.x = 130;
-            enemyCar.y = -60;
-            enemyCar.x = Math.floor(Math.random() * 230) + 10;
-            enemyCar.speed = 5;
-            carScore = 0;
-            let scoreEl = document.getElementById('carScore');
+            clearInterval(carInterval); pCar.x = 130; eCar.y = -60; eCar.x = Math.floor(Math.random() * 230) + 10; eCar.speed = 5; cScore = 0;
+            document.getElementById('carScore').innerText = "स्कोर: " + cScore;
+            document.removeEventListener('keydown', carControl); document.addEventListener('keydown', carControl);
+            carInterval = setInterval(() => {
+                const cv = document.getElementById('carCanvas'); if(!cv) return; const cx = cv.getContext('2d');
+                eCar.y += eCar.speed;
+                if(eCar.y > 400) { eCar.y = -60; eCar.x = Math.floor(Math.random() * 230) + 10; cScore++; document.getElementById('carScore').innerText = "स्कोर: " + cScore; if(cScore % 5 === 0) eCar.speed += 1; }
+                cx.fillStyle = "#222"; cx.fillRect(0, 0, 300, 400);
+                cx.strokeStyle = "#fff"; cx.beginPath(); cx.moveTo(150, 0); cx.lineTo(150, 400); cx.stroke();
+                cx.fillStyle = "#00ffff"; cx.fillRect(pCar.x, pCar.y, pCar.w, pCar.h);
+                cx.fillStyle = "#ff007f"; cx.fillRect(eCar.x, eCar.y, eCar.w, eCar.h);
+                if (pCar.x < eCar.x + eCar.w && pCar.x + pCar.w > eCar.x && pCar.y < eCar.y + eCar.h && pCar.y + pCar.h > eCar.y) { clearInterval(carInterval); alert("Boom! कार क्रैश हो गई। स्कोर: " + cScore); initCarGame(); }
+            }, 200);
+        }
+    </script>
+</body>
+</html>
