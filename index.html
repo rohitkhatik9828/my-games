@@ -17,7 +17,7 @@
 </head>
 <body>
 
-    <h1>🎮 Rohit's Gaming Zone 🎮</h1>
+    <h1>🎮 Rohit's offline Gaming Zone 🎮</h1>
     <div style="margin-bottom: 25px;">
         <button class="btn" onclick="showGame('g1')">Tic-Tac-Toe</button>
         <button class="btn" onclick="showGame('g2')">Snake Game</button>
@@ -54,7 +54,8 @@
 
     <!-- 4. JAGUAR RACING -->
     <div id="g4" class="game-section">
-        <h2>🏎️ Jaguar F-Pace Racing</h2>
+        <h2>🏎️ Black SUV Racing</h2>
+        <p>कीबोर्ड की <b>← और → Keys</b> से अपनी काली गाड़ी चलाएं!</p>
         <canvas id="carCanvas" width="300" height="400"></canvas>
         <p id="carScore">स्कोर: 0</p>
         <button class="btn" onclick="initCarGame()">Restart</button>
@@ -62,7 +63,7 @@
 
     <script>
         let sInt, cInt, turn='X', cells=Array(9).fill(''), gActive=true, sd="RIGHT";
-        let pCar={x:130,y:310,w:44,h:65}, eCar={x:100,y:-70,w:44,h:65,speed:5}, cScore=0;
+        let pCar={x:130,y:310,w:44,h:70}, eCar={x:100,y:-80,w:44,h:70,speed:5}, cScore=0;
 
         function showGame(id) {
             document.querySelectorAll('.game-section').forEach(g=>g.style.display='none');
@@ -75,10 +76,10 @@
         function makeMove(el, n) {
             if(cells[n]==='' && gActive) {
                 cells[n]=turn; el.innerText=turn; el.style.color=turn==='X'?'#00ffff':'#ff007f';
-                let wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+                let wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
                 if(wins.some(p=>p.every(i=>cells[i]===turn))) { document.getElementById('print').innerText="🎉 "+turn+" जीता!"; gActive=false; return; }
                 if(!cells.includes('')) { document.getElementById('print').innerText="🤝 ड्रॉ!"; gActive=false; return; }
-                turn=turn==='X'?'O':'X'; document.getElementById('print').innerText="बारी: "+turn;
+                turn=turn==='X'?'O':'X'; document.getElementById('print').innerText="बारी: " + turn;
             }
         }
         function resetTic() { cells.fill(''); document.querySelectorAll('.cell').forEach(c=>c.innerText=''); turn='X'; gActive=true; document.getElementById('print').innerText="बारी: X"; }
@@ -113,26 +114,49 @@
             else if(g>sNum) r.innerText="📉 नंबर बड़ा है!"; else r.innerText="📈 नंबर छोटा है!";
         }
 
-        // Car Game
-        function drawJaguar(cx,x,y,isP) {
-            cx.fillStyle=isP?"#1a1a24":"#e53935"; cx.fillRect(x,y,44,65);
-            cx.fillStyle="#111"; cx.fillRect(x+6,y+42,32,18);
-            cx.fillStyle="#fff"; cx.fillRect(x+4,y+38,8,3); cx.fillRect(x+32,y+38,8,3);
-            cx.fillStyle="#223"; cx.fillRect(x+5,y+12,34,18);
-        }
+        // Car Game (Advanced Vector Graphics - 100% Local Loading)
+        function enemyReset() { eCar.y=-80; eCar.x=Math.floor(Math.random()*210)+10; eCar.speed=5; }
         document.addEventListener('keydown', e=>{ if(e.keyCode==37 && pCar.x>10) pCar.x-=20; if(e.keyCode==39 && pCar.x<240) pCar.x+=20; });
+        
+        function drawCustomCar(cx, x, y, isPlayer) {
+            // बम्पर और मुख्य बॉडी
+            cx.fillStyle = isPlayer ? "#111116" : "#d32f2f"; // प्लेयर के लिए मस्कुलर ब्लैक, दुश्मन के लिए लाल कार
+            cx.fillRect(x, y, 44, 65);
+            
+            // फ्रंट ग्रिल डिजाइन
+            cx.fillStyle = "#222"; cx.fillRect(x+6, y+50, 32, 12);
+            cx.strokeStyle = "#888"; cx.lineWidth = 1; cx.strokeRect(x+6, y+50, 32, 12);
+            
+            // चमचमाती हेडलाइट्स (LED)
+            cx.fillStyle = "#fff"; cx.fillRect(x+2, y+46, 8, 4); cx.fillRect(x+34, y+46, 8, 4);
+            
+            // विंडशील्ड (कांच) और चमक रेखा
+            cx.fillStyle = "#334"; cx.fillRect(x+5, y+15, 34, 20);
+            cx.fillStyle = "rgba(255,255,255,0.4)"; cx.fillRect(x+8, y+15, 10, 20); 
+
+            // ओआरवीएम (साइड मिरर)
+            cx.fillStyle = isPlayer ? "#111116" : "#d32f2f";
+            cx.fillRect(x-4, y+22, 4, 8); cx.fillRect(x+44, y+22, 4, 8);
+        }
+
         function initCarGame() {
             clearInterval(cInt); pCar.x=130; enemyReset(); cScore=0; document.getElementById('carScore').innerText="स्कोर: "+cScore;
             cInt=setInterval(()=>{
-                const cv=document.getElementById('carCanvas'), cx=cv.getContext('2d'); eCar.y+=eCar.speed;
+                const cv=document.getElementById('carCanvas'); if(!cv) return; const cx=cv.getContext('2d'); eCar.y+=eCar.speed;
                 if(eCar.y>400) { enemyReset(); cScore++; document.getElementById('carScore').innerText="स्कोर: "+cScore; if(cScore%5===0) eCar.speed+=1; }
+                
+                // सड़क और पीली डिवाइडर लाइन
                 cx.fillStyle="#2c2c35"; cx.fillRect(0,0,300,400);
                 cx.strokeStyle="#ffd700"; cx.lineWidth=2; cx.beginPath(); cx.moveTo(150,0); cx.lineTo(150,400); cx.stroke();
-                drawJaguar(cx,pCar.x,pCar.y,true); drawJaguar(cx,eCar.x,eCar.y,false);
-                if (pCar.x<eCar.x+eCar.w && pCar.x+pCar.w>eCar.x && pCar.y<eCar.y+eCar.h && pCar.y+pCar.h>eCar.y) { clearInterval(cInt); alert("Crash! स्कोर: "+cScore); initCarGame(); }
+                
+                // दोनों गाड़ियों को ड्रा करना (100% पक्का दिखाई देंगी)
+                drawCustomCar(cx, pCar.x, pCar.y, true);  // आपकी ब्लैक कार
+                drawCustomCar(cx, eCar.x, eCar.y, false); // सामने वाली बाधा कार
+                
+                // क्रैश चेक
+                if (pCar.x<eCar.x+eCar.w && pCar.x+pCar.w>eCar.x && pCar.y<eCar.y+eCar.h && pCar.y+pCar.h > eCar.y) { clearInterval(cInt); alert("Crash! स्कोर: "+cScore); initCarGame(); }
             },30);
         }
-        function enemyReset() { eCar.y=-70; eCar.x=Math.floor(Math.random()*220)+10; eCar.speed=5; }
     </script>
 </body>
 </html>
