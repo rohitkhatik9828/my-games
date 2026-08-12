@@ -44,7 +44,7 @@
         .cell { width: 100px; height: 100px; background: #333; font-size: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 8px; font-weight: bold; }
         .cell:hover { background: #444; }
         #print { font-size: 20px; font-weight: bold; margin-top: 15px; color: #00ffff; }
-        /* Snake Style */
+        /* Canvas Style */
         canvas { background: #000; display: block; margin: 15px auto; border: 2px solid #00ffff; }
         /* Guess Style */
         input { padding: 10px; font-size: 16px; width: 80px; text-align: center; border-radius: 5px; border: none; outline: none; }
@@ -60,6 +60,7 @@
         <button class="btn" onclick="showGame('game1')">Tic-Tac-Toe</button>
         <button class="btn" onclick="showGame('game2')">Snake Game</button>
         <button class="btn" onclick="showGame('game3')">Number Guessing</button>
+        <button class="btn" onclick="showGame('game4')">🏎️ Car Game</button>
     </div>
 
     <!-- GAME 1: TIC TAC TOE -->
@@ -98,11 +99,29 @@
         <p id="guessResult"></p>
     </div>
 
+    <!-- GAME 4: CAR RACING GAME -->
+    <div id="game4" class="game-section">
+        <h2>🏎️ Car Racing Game</h2>
+        <p>कीबोर्ड की <b>Left (←) और Right (→)</b> कीज से कार को बचाएं!</p>
+        <canvas id="carCanvas" width="300" height="400"></canvas>
+        <p id="carScore">स्कोर: 0</p>
+        <button class="btn" onclick="initCarGame()">Restart Car Game</button>
+    </div>
+
     <script>
+        let snakeInterval;
+        let carInterval;
+
         function showGame(gameId) {
             document.querySelectorAll('.game-section').forEach(g => g.style.display = 'none');
             document.getElementById(gameId).style.display = 'block';
-            if(gameId === 'game2') { initSnake(); } else { clearInterval(snakeInterval); }
+            
+            clearInterval(snakeInterval);
+            clearInterval(carInterval);
+            document.removeEventListener('keydown', carControl);
+
+            if(gameId === 'game2') { initSnake(); }
+            if(gameId === 'game4') { initCarGame(); }
         }
 
         // --- 1. Tic Tac Toe Logic ---
@@ -123,7 +142,7 @@
         function resetTic() { cells.fill(''); document.querySelectorAll('.cell').forEach(c => c.innerText = ''); turn = 'X'; gameActive = true; document.getElementById('print').innerText = "बारी: X"; }
 
         // --- 2. Snake Game Logic ---
-        let snakeInterval; let d = "RIGHT";
+        let d = "RIGHT";
         function initSnake() {
             clearInterval(snakeInterval); d = "RIGHT";
             const canvas = document.getElementById('stage'); const ctx = canvas.getContext('2d'); const box = 15;
@@ -148,7 +167,7 @@
                 if(d == "LEFT") snakeX -= box; if(d == "UP") snakeY -= box; if(d == "RIGHT") snakeX += box; if(d == "DOWN") snakeY += box;
                 if(snakeX == food.x && snakeY == food.y) { score++; document.getElementById('snakeScore').innerText = "स्कोर: " + score; food = { x: Math.floor(Math.random() * 20) * box, y: Math.floor(Math.random() * 20) * box }; } else { snake.pop(); }
                 let newHead = { x: snakeX, y: snakeY };
-                if(snakeX < 0 || snakeY < 0 || snakeX >= 300 || snakeY >= 300 || snake.some(s => s.x === newHead.x && s.y === newHead.y)) { clearInterval(snakeInterval); alert("Game Over! स्कोर: " + score); initSnake(); return; }
+                if(snakeX < 0 || snakeY < 0 || snakeX >= 300 || snakeY >= 300 || snake.slice(1).some(s => s.x === newHead.x && s.y === newHead.y)) { clearInterval(snakeInterval); alert("Game Over! स्कोर: " + score); initSnake(); return; }
                 snake.unshift(newHead);
             }
             snakeInterval = setInterval(draw, 150);
@@ -163,6 +182,23 @@
             else if (guess > secretNum) { res.innerText = "📉 नंबर बहुत बड़ा है!"; res.style.color = "#ff007f"; }
             else { res.innerText = "📈 नंबर बहुत छोटा है!"; res.style.color = "#ff007f"; }
         }
-    </script>
-</body>
-</html>
+
+        // --- 4. Car Racing Game Logic ---
+        let playerCar = { x: 130, y: 320, w: 40, h: 60 };
+        let enemyCar = { x: 100, y: -60, w: 40, h: 60, speed: 5 };
+        let carScore = 0;
+
+        function carControl(e) {
+            if(e.keyCode == 37 && playerCar.x > 10) playerCar.x -= 20;
+            if(e.keyCode == 39 && playerCar.x < 250) playerCar.x += 20;
+        }
+
+        function initCarGame() {
+            clearInterval(carInterval);
+            playerCar.x = 130;
+            enemyCar.y = -60;
+            enemyCar.x = Math.floor(Math.random() * 230) + 10;
+            enemyCar.speed = 5;
+            carScore = 0;
+            document.getElementById('carScore').innerText = "स्कोर: " + carScore;
+            
