@@ -3,26 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rohit's Gaming Zone</title>
+    <title>Rohit's 10-in-1 Offline Gaming Zone</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #1e1e2e; color: white; margin: 0; padding: 20px; }
-        .btn { background: #00ffff; color: #1e1e2e; border: none; padding: 10px 20px; font-size: 16px; font-weight: bold; margin: 5px; cursor: pointer; border-radius: 25px; box-shadow: 0 4px #00bfff; }
-        .btn:hover { background: #ff007f; color: white; }
-        .game-section { display: none; background: #252538; padding: 20px; border-radius: 15px; max-width: 400px; margin: 20px auto; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .board { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; justify-content: center; margin-top: 15px; }
-        .cell { width: 100px; height: 100px; background: #333; font-size: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 8px; font-weight: bold; }
-        canvas { background: #000; display: block; margin: 15px auto; border: 2px solid #00ffff; }
-        input { padding: 10px; font-size: 16px; width: 80px; text-align: center; border-radius: 5px; border: none; }
+        body { font-family: sans-serif; text-align: center; background: #1e1e2e; color: white; margin: 0; padding: 10px; }
+        h1 { color: #ff007f; text-shadow: 0 0 10px #ff007f; margin: 10px 0; font-size: 24px; }
+        .menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; max-width: 600px; margin: 0 auto 15px auto; padding: 5px; }
+        .btn { background: #1e1e2e; color: #00ffff; border: 2px solid #00ffff; padding: 8px 10px; font-size: 13px; font-weight: bold; cursor: pointer; border-radius: 12px; }
+        .btn:hover, .btn.active { background: #ff007f; color: white; border-color: #ff007f; box-shadow: 0 0 8px #ff007f; }
+        .game-section { display: none; background: #252538; padding: 15px; border-radius: 15px; max-width: 400px; margin: 10px auto; box-shadow: 0 5px 15px rgba(0,0,0,0.5); border: 1px solid #333; }
+        canvas { background: #000; display: block; margin: 10px auto; border: 2px solid #00ffff; }
+        .board { display: grid; grid-template-columns: repeat(3, 90px); gap: 5px; justify-content: center; }
+        .cell { width: 90px; height: 90px; background: #333; font-size: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 8px; font-weight: bold; }
+        .memo-grid { display: grid; grid-template-columns: repeat(4, 60px); gap: 8px; justify-content: center; }
+        .memo-card { width: 60px; height: 60px; background: #ff007f; border-radius: 8px; cursor: pointer; font-size: 28px; display: flex; align-items: center; justify-content: center; }
+        .memo-card.flipped { background: #333; }
+        input { padding: 8px; font-size: 14px; width: 100px; text-align: center; border-radius: 5px; border: none; }
+        .tile-row { display: flex; justify-content: center; }
+        .tile { width: 60px; height: 80px; border: 1px solid #333; background: white; cursor: pointer; }
+        .tile.black { background: black; }
     </style>
 </head>
 <body>
 
-    <h1>🎮 Rohit's offline Gaming Zone 🎮</h1>
-    <div style="margin-bottom: 25px;">
-        <button class="btn" onclick="showGame('g1')">Tic-Tac-Toe</button>
-        <button class="btn" onclick="showGame('g2')">Snake Game</button>
-        <button class="btn" onclick="showGame('g3')">Guessing Game</button>
-        <button class="btn" onclick="showGame('g4')">🏎️ Jaguar Game</button>
+    <h1>🎮 Rohit's 10 Offline Games 🎮</h1>
+    <!-- 10 ऑफलाइन गेम्स के बटन्स का मेनू -->
+    <div class="menu">
+        <button id="b1" class="btn" onclick="showGame('g1','b1')">TicTacToe</button>
+        <button id="b2" class="btn" onclick="showGame('g2','b2')">🐍 Snake</button>
+        <button id="b3" class="btn" onclick="showGame('g3','b3')">🏎️ Jaguar</button>
+        <button id="b4" class="btn" onclick="showGame('g4','b4')">🧩 Memory</button>
+        <button id="b5" class="btn" onclick="showGame('g5','b5')">🧱 Bricks</button>
+        <button id="b6" class="btn" onclick="showGame('g6','b6')">🏓 Pong</button>
+        <button id="b7" class="btn" onclick="showGame('g7','b7')">🚀 Shooter</button>
+        <button id="b8" class="btn" onclick="showGame('g8','b8')">🐸 Frogger</button>
+        <button id="b9" class="btn" onclick="showGame('g9','b9')">🎵 Tiles</button>
+        <button id="b10" class="btn" onclick="showGame('g10','b10')">🧮 Math</button>
     </div>
 
     <!-- 1. TIC TAC TOE -->
@@ -33,61 +48,90 @@
             <div class="cell" onclick="makeMove(this,3)"></div><div class="cell" onclick="makeMove(this,4)"></div><div class="cell" onclick="makeMove(this,5)"></div>
             <div class="cell" onclick="makeMove(this,6)"></div><div class="cell" onclick="makeMove(this,7)"></div><div class="cell" onclick="makeMove(this,8)"></div>
         </div>
-        <p id="print">बारी: X</p>
-        <button class="btn" onclick="resetTic()">Reset</button>
+        <p id="print">बारी: X</p><button class="btn" onclick="resetTic()">Reset</button>
     </div>
 
-    <!-- 2. SNAKE GAME -->
-    <div id="g2" class="game-section">
-        <h2>Snake Game</h2>
-        <canvas id="stage" width="300" height="300"></canvas>
-        <p id="snakeScore">स्कोर: 0</p>
-    </div>
+    <!-- 2. SNAKE -->
+    <div id="g2" class="game-section"><h2>Snake Game</h2><canvas id="stage" width="300" height="300"></canvas><p id="sSc">स्कोर: 0</p></div>
 
-    <!-- 3. NUMBER GUESSING -->
-    <div id="g3" class="game-section">
-        <h2>Number Guess (1 से 20)</h2>
-        <input type="number" id="guessInput" min="1" max="20" placeholder="0">
-        <br><br><button class="btn" onclick="checkGuess()">Check</button>
-        <p id="guessResult"></p>
-    </div>
+    <!-- 3. JAGUAR RACING -->
+    <div id="g3" class="game-section"><h2>🏎️ Jaguar F-Pace</h2><canvas id="carCanvas" width="300" height="350"></canvas><p id="cSc">स्कोर: 0</p><button class="btn" onclick="initC()">Restart</button></div>
 
-    <!-- 4. JAGUAR RACING -->
-    <div id="g4" class="game-section">
-        <h2>🏎️ Black SUV Racing</h2>
-        <p>कीबोर्ड की <b>← और → Keys</b> से अपनी काली गाड़ी चलाएं!</p>
-        <canvas id="carCanvas" width="300" height="400"></canvas>
-        <p id="carScore">स्कोर: 0</p>
-        <button class="btn" onclick="initCarGame()">Restart</button>
-    </div>
+    <!-- 4. MEMORY MATCH -->
+    <div id="g4" class="game-section"><h2>🧩 Memory Match</h2><div class="memo-grid" id="memoGrid"></div><p id="memoScore" style="margin-top:10px;"></p></div>
 
+    <!-- 5. BRICK BREAKER -->
+    <div id="g5" class="game-section"><h2>🧱 Brick Breaker</h2><canvas id="brickCanvas" width="300" height="300"></canvas><button class="btn" onclick="initBricks()">Restart</button></div>
+
+    <!-- 6. PING PONG -->
+    <div id="g6" class="game-section"><h2>🏓 Ping Pong Match</h2><canvas id="pongCanvas" width="300" height="300"></canvas><p id="pongScore">प्लेयर: 0 | कंप्यूटर: 0</p></div>
+
+    <!-- 7. SPACE SHOOTER -->
+    <div id="g7" class="game-section"><h2>🚀 Space Shooter</h2><canvas id="spaceCanvas" width="300" height="350"></canvas><p id="spaceScore">स्कोर: 0</p></div>
+
+    <!-- 8. FROGGER -->
+    <div id="g8" class="game-section"><h2>🐸 Frogger Crossing</h2><canvas id="frogCanvas" width="300" height="300"></canvas><p id="frogScore">स्कोर: 0</p></div>
+
+    <!-- 9. PIANO TILES -->
+    <div id="g9" class="game-section"><h2>🎵 Piano Tiles</h2><div id="tileZone"></div><p id="pianoScore" style="margin-top:10px;">स्कोर: 0</p></div>
+
+    <!-- 10. MATH RUN -->
+    <div id="g10" class="game-section"><h2>🧮 Math Quiz Speedrun</h2><h3 id="mathQ">2 + 2 = ?</h3><input type="number" id="mathIn" placeholder="उत्तर दें"><br><br><button class="btn" onclick="checkMath()">Submit</button><p id="mathScore" style="margin-top:10px;">स्कोर: 0</p></div>
+
+    <!-- मोबाइल और फोन के लिए टच कंट्रोल बटन्स -->
+    <div id="mobileControls" style="margin-top:15px; display:none;">
+        <button class="btn" style="padding:15px 25px; font-size:18px;" onclick="triggerKey(37)">◀ Left</button>
+        <button class="btn" style="padding:15px 25px; font-size:18px; background:#ff007f; color:white;" onclick="triggerKey(32)">▲ Jump / Shoot</button>
+        <button class="btn" style="padding:15px 25px; font-size:18px;" onclick="triggerKey(39)">Right ▶</button>
+    </div>
     <script>
-        let sInt, cInt, turn='X', cells=Array(9).fill(''), gActive=true, sd="RIGHT";
-        let pCar={x:130,y:310,w:44,h:70}, eCar={x:100,y:-80,w:44,h:70,speed:5}, cScore=0;
+        let sInt, cInt, turn='X', cells=Array(9).fill(''), gAct=true, sd="RIGHT";
+        let pCar={x:130,y:270,w:44,h:65}, eCar={x:100,y:-70,w:44,h:65,speed:5}, cScore=0;
+        let mQ=0, mA=0, mSc=0;
 
-        function showGame(id) {
+        // --- असली साँप के सिर की इमेज लोड करना ---
+        const snakeHeadImg = new Image();
+        snakeHeadImg.src = "https://ibb.co";
+
+        function showGame(id, bId) {
             document.querySelectorAll('.game-section').forEach(g=>g.style.display='none');
+            document.querySelectorAll('.menu .btn').forEach(b=>b.classList.remove('active'));
             let el=document.getElementById(id); if(el) el.style.display='block';
-            clearInterval(sInt); clearInterval(cInt);
-            if(id==='g2') initSnake(); if(id==='g4') initCarGame();
+            let btn=document.getElementById(bId); if(btn) btn.classList.add('active');
+            
+            // एक्शन गेम्स में मोबाइल बटन्स दिखाना
+            if(['g2','g3','g6','g7','g8'].includes(id)) {
+                document.getElementById('mobileControls').style.display = 'block';
+            } else {
+                document.getElementById('mobileControls').style.display = 'none';
+            }
+
+            clearInterval(sInt); clearInterval(cInt); clearInterval(bInt); clearInterval(pongInt); clearInterval(spaceInt); clearInterval(frogInt);
+            if(id==='g2') initS(); if(id==='g3') initC(); if(id==='g4') initMemo(); 
+            if(id==='g5') initBricks(); if(id==='g6') initPong(); if(id==='g7') initSpace();
+            if(id==='g8') initFrog(); if(id==='g9') initTiles(); if(id==='g10') nextMath();
         }
 
-        // Tic Tac Toe
+        function triggerKey(code) {
+            let fakeEvent = { keyCode: code, preventDefault: function() {} };
+            document.dispatchEvent(new KeyboardEvent('keydown', fakeEvent));
+        }
+
+        // --- 1. Tic Tac Toe ---
         function makeMove(el, n) {
-            if(cells[n]==='' && gActive) {
+            if(cells[n]==='' && gAct) {
                 cells[n]=turn; el.innerText=turn; el.style.color=turn==='X'?'#00ffff':'#ff007f';
-                let wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-                if(wins.some(p=>p.every(i=>cells[i]===turn))) { document.getElementById('print').innerText="🎉 "+turn+" जीता!"; gActive=false; return; }
-                if(!cells.includes('')) { document.getElementById('print').innerText="🤝 ड्रॉ!"; gActive=false; return; }
-                turn=turn==='X'?'O':'X'; document.getElementById('print').innerText="बारी: " + turn;
+                let wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+                if(wins.some(p=>p.every(i=>cells[i]===turn))) { document.getElementById('print').innerText="🎉 "+turn+" जीता!"; gAct=false; return; }
+                if(!cells.includes('')) { document.getElementById('print').innerText="🤝 ड्रॉ!"; gAct=false; return; }
+                turn=turn==='X'?'O':'X'; document.getElementById('print').innerText="बारी: "+turn;
             }
         }
-        function resetTic() { cells.fill(''); document.querySelectorAll('.cell').forEach(c=>c.innerText=''); turn='X'; gActive=true; document.getElementById('print').innerText="बारी: X"; }
+        function resetTic() { cells.fill(''); document.querySelectorAll('.cell').forEach(c=>c.innerText=''); turn='X'; gAct=true; document.getElementById('print').innerText="बारी: X"; }
 
-        // Snake Game
-        function initSnake() {
-            clearInterval(sInt); sd="RIGHT";
-            const cv=document.getElementById('stage'), cx=cv.getContext('2d'), b=15;
+        // --- 2. Snake Game (Real Snake Head) ---
+        function initS() {
+            clearInterval(sInt); sd="RIGHT"; const cv=document.getElementById('stage'), cx=cv.getContext('2d'), b=15;
             let snake=[{x:150,y:150}], score=0, food={x:75,y:75};
             document.onkeydown=e=>{
                 if(e.keyCode==37 && sd!="RIGHT") sd="LEFT"; if(e.keyCode==38 && sd!="DOWN") sd="UP";
@@ -95,67 +139,177 @@
             };
             sInt=setInterval(()=>{
                 cx.fillStyle='#000'; cx.fillRect(0,0,300,300);
-                for(let i=0;i<snake.length;i++) { cx.fillStyle=i==0?'#00ffff':'#00bfff'; cx.fillRect(snake[i].x,snake[i].y,b-1,b-1); }
-                cx.fillStyle='red'; cx.fillRect(food.x,food.y,b-1,b-1);
-                let nX=snake[0].x, nY=snake[0].y;
-                if(sd=="LEFT") nX-=b; if(sd=="UP") nY-=b; if(sd=="RIGHT") nX+=b; if(sd=="DOWN") nY+=b;
-                if(nX==food.x && nY==food.y) { score++; document.getElementById('snakeScore').innerText="स्कोर: "+score; food={x:Math.floor(Math.random()*19)*b,y:Math.floor(Math.random()*19)*b}; } else { snake.pop(); }
-                let head={x:nX,y:nY};
-                if(nX<0 || nY<0 || nX>=300 || nY>=300 || snake.some(s=>s.x===head.x && s.y===head.y)) { clearInterval(sInt); alert("Game Over! स्कोर: "+score); initSnake(); return; }
+                for(let i=0; i<snake.length; i++) { 
+                    if(i === 0) { cx.drawImage(snakeHeadImg, snake[i].x, snake[i].y, b, b); } 
+                    else { cx.fillStyle='#00ff00'; cx.fillRect(snake[i].x, snake[i].y, b-1, b-1); }
+                }
+                cx.fillStyle='red'; cx.fillRect(food.x, food.y, b-1, b-1);
+                let nX=snake[0].x, nY=snake[0].y; if(sd=="LEFT") nX-=b; if(sd=="UP") nY-=b; if(sd=="RIGHT") nX+=b; if(sd=="DOWN") nY+=b;
+                if(nX==food.x && nY==food.y) { score++; document.getElementById('sSc').innerText="स्कोर: "+score; food={x:Math.floor(Math.random()*19)*b,y:Math.floor(Math.random()*19)*b}; } else { snake.pop(); }
+                let head={x:nX,y:nY}; if(nX<0 || nY<0 || nX>=300 || nY>=300 || snake.some(s=>s.x===head.x && s.y===head.y)) { clearInterval(sInt); alert("Game Over! स्कोर: "+score); initS(); return; }
                 snake.unshift(head);
             },150);
         }
 
-        // Guessing Game
-        let sNum=Math.floor(Math.random()*20)+1;
-        function checkGuess() {
-            let g=document.getElementById('guessInput').value, r=document.getElementById('guessResult'); if(!g) return;
-            if(g==sNum) { r.innerText="🎉 सही जवाब!"; sNum=Math.floor(Math.random()*20)+1; }
-            else if(g>sNum) r.innerText="📉 नंबर बड़ा है!"; else r.innerText="📈 नंबर छोटा है!";
-        }
-
-        // Car Game (Advanced Vector Graphics - 100% Local Loading)
-        function enemyReset() { eCar.y=-80; eCar.x=Math.floor(Math.random()*210)+10; eCar.speed=5; }
+        // --- 3. Jaguar Car Game ---
+        function drawJaguar(cx,x,y,isP) { cx.fillStyle=isP?"#1a1a24":"#e53935"; cx.fillRect(x,y,44,65); cx.fillStyle="#111"; cx.fillRect(x+6,y+42,32,18); cx.fillStyle="#fff"; cx.fillRect(x+4,y+38,8,3); cx.fillRect(x+32,y+38,8,3); cx.fillStyle="#223"; cx.fillRect(x+5,y+12,34,18); }
         document.addEventListener('keydown', e=>{ if(e.keyCode==37 && pCar.x>10) pCar.x-=20; if(e.keyCode==39 && pCar.x<240) pCar.x+=20; });
-        
-        function drawCustomCar(cx, x, y, isPlayer) {
-            // बम्पर और मुख्य बॉडी
-            cx.fillStyle = isPlayer ? "#111116" : "#d32f2f"; // प्लेयर के लिए मस्कुलर ब्लैक, दुश्मन के लिए लाल कार
-            cx.fillRect(x, y, 44, 65);
-            
-            // फ्रंट ग्रिल डिजाइन
-            cx.fillStyle = "#222"; cx.fillRect(x+6, y+50, 32, 12);
-            cx.strokeStyle = "#888"; cx.lineWidth = 1; cx.strokeRect(x+6, y+50, 32, 12);
-            
-            // चमचमाती हेडलाइट्स (LED)
-            cx.fillStyle = "#fff"; cx.fillRect(x+2, y+46, 8, 4); cx.fillRect(x+34, y+46, 8, 4);
-            
-            // विंडशील्ड (कांच) और चमक रेखा
-            cx.fillStyle = "#334"; cx.fillRect(x+5, y+15, 34, 20);
-            cx.fillStyle = "rgba(255,255,255,0.4)"; cx.fillRect(x+8, y+15, 10, 20); 
-
-            // ओआरवीएम (साइड मिरर)
-            cx.fillStyle = isPlayer ? "#111116" : "#d32f2f";
-            cx.fillRect(x-4, y+22, 4, 8); cx.fillRect(x+44, y+22, 4, 8);
+        function initC() {
+            clearInterval(cInt); pCar.x=130; eCar.y=-70; eCar.x=Math.floor(Math.random()*220)+10; eCar.speed=5; cScore=0; document.getElementById('cSc').innerText="स्कोर: "+cScore;
+            cInt=setInterval(()=>{
+                const cv=document.getElementById('carCanvas'), cx=cv.getContext('2d'); if(!cv) return; eCar.y+=eCar.speed;
+                if(eCar.y>350) { eCar.y=-70; eCar.x=Math.floor(Math.random()*220)+10; cScore++; document.getElementById('cSc').innerText="स्कोर: "+cScore; if(cScore%5===0) eCar.speed+=1; }
+                cx.fillStyle="#2c2c35"; cx.fillRect(0,0,300,350); cx.strokeStyle="#ffd700"; cx.lineWidth=2; cx.beginPath(); cx.moveTo(150,0); cx.lineTo(150,350); cx.stroke();
+                drawJaguar(cx,pCar.x,pCar.y,true); drawJaguar(cx,eCar.x,eCar.y,false);
+                if (pCar.x<eCar.x+eCar.w && pCar.x+pCar.w>eCar.x && pCar.y<eCar.y+eCar.h && pCar.y+pCar.h > eCar.y) { clearInterval(cInt); alert("Crash! स्कोर: "+cScore); initC(); }
+            },30);
         }
 
-        function initCarGame() {
-            clearInterval(cInt); pCar.x=130; enemyReset(); cScore=0; document.getElementById('carScore').innerText="स्कोर: "+cScore;
-            cInt=setInterval(()=>{
-                const cv=document.getElementById('carCanvas'); if(!cv) return; const cx=cv.getContext('2d'); eCar.y+=eCar.speed;
-                if(eCar.y>400) { enemyReset(); cScore++; document.getElementById('carScore').innerText="स्कोर: "+cScore; if(cScore%5===0) eCar.speed+=1; }
-                
-                // सड़क और पीली डिवाइडर लाइन
-                cx.fillStyle="#2c2c35"; cx.fillRect(0,0,300,400);
-                cx.strokeStyle="#ffd700"; cx.lineWidth=2; cx.beginPath(); cx.moveTo(150,0); cx.lineTo(150,400); cx.stroke();
-                
-                // दोनों गाड़ियों को ड्रा करना (100% पक्का दिखाई देंगी)
-                drawCustomCar(cx, pCar.x, pCar.y, true);  // आपकी ब्लैक कार
-                drawCustomCar(cx, eCar.x, eCar.y, false); // सामने वाली बाधा कार
-                
-                // क्रैश चेक
-                if (pCar.x<eCar.x+eCar.w && pCar.x+pCar.w>eCar.x && pCar.y<eCar.y+eCar.h && pCar.y+pCar.h > eCar.y) { clearInterval(cInt); alert("Crash! स्कोर: "+cScore); initCarGame(); }
-            },30);
+        // --- 4. Memory Match Game ---
+        let memoEmojis = ['🔥','🔥','👑','👑','🦁','🦁','⚽','⚽','💎','💎','🎸','🎸','🍕','🍉','🍕','🍉'], pickedCards = [], matchedCount = 0;
+        function initMemo() {
+            const grid = document.getElementById('memoGrid'); grid.innerHTML = ''; pickedCards = []; matchedCount = 0;
+            document.getElementById('memoScore').innerText = "मैच ढूंढें!"; memoEmojis.sort(() => 0.5 - Math.random());
+            for(let i=0; i<16; i++) {
+                let card = document.createElement('div'); card.className = 'memo-card'; card.dataset.index = i; card.dataset.emoji = memoEmojis[i];
+                card.onclick = function() { flipCard(this); }; grid.appendChild(card);
+            }
+        }
+        function flipCard(card) {
+            if(pickedCards.length < 2 && !card.classList.contains('flipped')) {
+                card.classList.add('flipped'); card.innerText = card.dataset.emoji; pickedCards.push(card);
+                if(pickedCards.length === 2) setTimeout(checkMemoMatch, 600);
+            }
+        }
+        function checkMemoMatch() {
+            if(pickedCards[0].dataset.emoji === pickedCards[1].dataset.emoji) { matchedCount += 2; pickedCards = []; if(matchedCount === 16) document.getElementById('memoScore').innerText = "🎉 जीत गए!"; }
+            else { setTimeout(()=>{ pickedCards[0].classList.remove('flipped'); pickedCards[0].innerText = ''; pickedCards[1].classList.remove('flipped'); pickedCards[1].innerText = ''; pickedCards = []; }, 200); }
+        }
+        // --- 5. Brick Breaker Game ---
+        let bInt, ball={x:150,y:200,dx:2,dy:-2,r:7}, paddle={x:120,w:60,h:10}, bricks=[], brickRows=3, brickCols=5;
+        function initBricks() {
+            clearInterval(bInt); const cv=document.getElementById('brickCanvas'), cx=cv.getContext('2d');
+            ball.x=150; ball.y=240; ball.dx=2; ball.dy=-2; paddle.x=120; bricks=[];
+            for(let c=0; c<brickCols; c++) { bricks[c] = []; for(let r=0; r<brickRows; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
+            document.onkeydown = e => { if(e.keyCode == 37 && paddle.x > 0) paddle.x -= 15; if(e.keyCode == 39 && paddle.x < 240) paddle.x += 15; };
+            bInt = setInterval(() => {
+                cx.clearRect(0, 0, 300, 300);
+                cx.fillStyle = "#ff007f"; cx.beginPath(); cx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2); cx.fill();
+                cx.fillStyle = "#00ffff"; cx.fillRect(paddle.x, 280, paddle.w, paddle.h);
+                for(let c=0; c<brickCols; c++) {
+                    for(let r=0; r<brickRows; r++) {
+                        if(bricks[c][r].status == 1) {
+                            let bX = (c*55)+15, bY = (r*20)+30; bricks[c][r].x = bX; bricks[c][r].y = bY;
+                            cx.fillStyle = "#ffd700"; cx.fillRect(bX, bY, 50, 15);
+                            if(ball.x > bX && ball.x < bX+50 && ball.y > bY && ball.y < bY+15) { ball.dy = -ball.dy; bricks[c][r].status = 0; }
+                        }
+                    }
+                }
+                ball.x += ball.dx; ball.y += ball.dy;
+                if(ball.x < ball.r || ball.x > 300-ball.r) ball.dx = -ball.dx;
+                if(ball.y < ball.r) ball.dy = -ball.dy;
+                else if(ball.y > 280-ball.r) {
+                    if(ball.x > paddle.x && ball.x < paddle.x + paddle.w) { ball.dy = -ball.dy; }
+                    else if(ball.y > 300) { clearInterval(bInt); alert("Game Over!"); initBricks(); }
+                }
+            }, 20);
+        }
+
+        // --- 6. Ping Pong Match ---
+        let pongInt, p1Y=110, p2Y=110, pBall={x:150,y:150,dx:3,dy:2}, p1Sc=0, p2Sc=0;
+        function initPong() {
+            clearInterval(pongInt); const cv=document.getElementById('pongCanvas'), cx=cv.getContext('2d');
+            pBall={x:150,y:150,dx:3,dy:2}; p1Y=110; p2Y=110;
+            document.onkeydown = e => { if(e.keyCode == 38 && p1Y > 10) p1Y -= 15; if(e.keyCode == 40 && p1Y < 230) p1Y += 15; };
+            pongInt = setInterval(() => {
+                cx.clearRect(0, 0, 300, 300);
+                cx.fillStyle = "#ffffff"; cx.fillRect(10, p1Y, 10, 60); cx.fillRect(280, p2Y, 10, 60);
+                cx.beginPath(); cx.arc(pBall.x, pBall.y, 6, 0, Math.PI*2); cx.fill();
+                if(p2Y + 30 < pBall.y && p2Y < 230) p2Y += 2; else if(p2Y + 30 > pBall.y && p2Y > 10) p2Y -= 2;
+                pBall.x += pBall.dx; pBall.y += pBall.dy;
+                if(pBall.y < 6 || pBall.y > 294) pBall.dy = -pBall.dy;
+                if(pBall.x < 20 && pBall.y > p1Y && pBall.y < p1Y + 60) pBall.dx = -pBall.dx;
+                if(pBall.x > 270 && pBall.y > p2Y && pBall.y < p2Y + 60) pBall.dx = -pBall.dx;
+                if(pBall.x < 0) { p2Sc++; initPong(); } if(pBall.x > 300) { p1Sc++; initPong(); }
+                document.getElementById('pongScore').innerText = `प्लेयर: ${p1Sc} | कंप्यूटर: ${p2Sc}`;
+            }, 20);
+        }
+
+        // --- 7. Space Shooter ---
+        let spaceInt, sShipX=135, lasers=[], stars=[];
+        function initSpace() {
+            clearInterval(spaceInt); const cv=document.getElementById('spaceCanvas'), cx=cv.getContext('2d');
+            sShipX=135; lasers=[]; stars=[]; let spScore=0;
+            document.onkeydown = e => { 
+                if(e.keyCode == 37 && sShipX > 10) sShipX -= 15; 
+                if(e.keyCode == 39 && sShipX < 260) sShipX += 15; 
+                if(e.keyCode == 32) lasers.push({x:sShipX+12, y:315}); 
+            };
+            spaceInt = setInterval(() => {
+                cx.clearRect(0,0,300,350);
+                cx.fillStyle="#00ffff"; cx.fillRect(sShipX, 320, 30, 15);
+                if(Math.random()<0.03) stars.push({x:Math.random()*260+20, y:0});
+                cx.fillStyle="#ffff00"; lasers.forEach((l,i) => { l.y -= 5; cx.fillRect(l.x, l.y, 4, 10); if(l.y<0) lasers.splice(i,1); });
+                cx.fillStyle="red";
+                stars.forEach((s,si) => {
+                    s.y += 2; cx.beginPath(); cx.arc(s.x, s.y, 8, 0, Math.PI*2); cx.fill();
+                    if(s.y>350) { clearInterval(spaceInt); alert("Game Over!"); initSpace(); }
+                    lasers.forEach((l,li) => { if(l.x > s.x-8 && l.x < s.x+8 && l.y > s.y-8 && l.y < s.y+8) { stars.splice(si,1); lasers.splice(li,1); spScore++; document.getElementById('spaceScore').innerText="स्कोर: "+spScore; } });
+                });
+            }, 30);
+        }
+
+        // --- 8. Frogger Road Crossing ---
+        let frogInt, frog={x:140,y:270}, cars=[{x:0,y:100,speed:2},{x:200,y:160,speed:-3}], frScore=0;
+        function initFrog() {
+            clearInterval(frogInt); const cv=document.getElementById('frogCanvas'), cx=cv.getContext('2d');
+            frog={x:140,y:270}; frScore=0; document.getElementById('frogScore').innerText="स्कोर: 0";
+            document.onkeydown = e => {
+                if(e.keyCode == 37 && frog.x > 10) frog.x -= 20; if(e.keyCode == 39 && frog.x < 270) frog.x += 20;
+                if(e.keyCode == 38 && frog.y > 10) frog.y -= 20; if(e.keyCode == 40 && frog.y < 270) frog.y += 20;
+            };
+            frogInt = setInterval(() => {
+                cx.clearRect(0,0,300,300);
+                cx.fillStyle="#00ff00"; cx.fillRect(frog.x, frog.y, 20, 20);
+                cars.forEach(c => {
+                    c.x += c.speed; if(c.x > 300) c.x = -40; if(c.x < -40) c.x = 300;
+                    cx.fillStyle="red"; cx.fillRect(c.x, c.y, 40, 20);
+                    if(frog.x < c.x+40 && frog.x+20 > c.x && frog.y < c.y+20 && frog.y+20 > c.y) { clearInterval(frogInt); alert("Game Over!"); initFrog(); }
+                });
+                if(frog.y < 30) { frScore++; document.getElementById('frogScore').innerText="स्कोर: "+frScore; frog.y=270; }
+            }, 30);
+        }
+
+        // --- 9. Piano Tiles ---
+        let tScore = 0;
+        function initTiles() {
+            tScore=0; document.getElementById('pianoScore').innerText="स्कोर: 0";
+            const zone = document.getElementById('tileZone'); zone.innerHTML = '';
+            for(let i=0; i<3; i++) {
+                let row = document.createElement('div'); row.className = 'tile-row';
+                let rand = Math.floor(Math.random()*4);
+                for(let j=0; j<4; j++) {
+                    let tile = document.createElement('div'); tile.className = (j===rand) ? 'tile black' : 'tile';
+                    tile.onclick = function() {
+                        if(this.classList.contains('black')) { this.classList.remove('black'); tScore++; document.getElementById('pianoScore').innerText="स्कोर: "+tScore; initTiles(); }
+                        else { alert("Game Over!"); initTiles(); }
+                    };
+                    row.appendChild(tile);
+                }
+                zone.appendChild(row);
+            }
+        }
+
+        // --- 10. Math Quiz ---
+        function nextMath() {
+            let n1 = Math.floor(Math.random()*10)+1, n2 = Math.floor(Math.random()*10)+1;
+            mQ = n1 + " + " + n2 + " = ?"; mA = n1 + n2; document.getElementById('mathQ').innerText = mQ;
+        }
+        function checkMath() {
+            let ans = document.getElementById('mathIn').value;
+            if(ans == mA) { mSc++; document.getElementById('mathScore').innerText="स्कोर: "+mSc; }
+            else { alert("गलत जवाब! सही उत्तर " + mA); mSc=0; document.getElementById('mathScore').innerText="स्कोर: 0"; }
+            document.getElementById('mathIn').value = ''; nextMath();
         }
     </script>
 </body>
