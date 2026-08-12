@@ -114,7 +114,10 @@
 
         function showGame(gameId) {
             document.querySelectorAll('.game-section').forEach(g => g.style.display = 'none');
-            document.getElementById(gameId).style.display = 'block';
+            let element = document.getElementById(gameId);
+            if(element) {
+                element.style.display = 'block';
+            }
             
             clearInterval(snakeInterval);
             clearInterval(carInterval);
@@ -200,5 +203,4 @@
             enemyCar.x = Math.floor(Math.random() * 230) + 10;
             enemyCar.speed = 5;
             carScore = 0;
-            document.getElementById('carScore').innerText = "स्कोर: " + carScore;
-            
+            let scoreEl = document.getElementById('carScore');
