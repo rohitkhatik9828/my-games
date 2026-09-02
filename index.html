@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Rohit's 10-1 Offline Gaming Zone</title>
+    <title>Rohit's 10-in-1 Offline Gaming Zone</title>
     <style>
         body { font-family: sans-serif; text-align: center; background: #1e1e2e; color: white; margin: 0; padding: 10px; }
         h1 { color: #ff007f; text-shadow: 0 0 10px #ff007f; margin: 10px 0; font-size: 24px; }
@@ -11,7 +11,7 @@
         .btn { background: #1e1e2e; color: #00ffff; border: 2px solid #00ffff; padding: 8px 10px; font-size: 13px; font-weight: bold; cursor: pointer; border-radius: 12px; }
         .btn:hover, .btn.active { background: #ff007f; color: white; border-color: #ff007f; box-shadow: 0 0 8px #ff007f; }
         .game-section { display: none; background: #252538; padding: 15px; border-radius: 15px; max-width: 400px; margin: 10px auto; box-shadow: 0 5px 15px rgba(0,0,0,0.5); border: 1px solid #333; }
-        canvas { background: #000; display: block; margin: 10px auto; border: 2px solid #00ffff; }
+        canvas { background: #000; display: block; margin: 10px auto; border: 2px solid #00ffff; touch-action: none; user-select: none; }
         .board { display: grid; grid-template-columns: repeat(3, 90px); gap: 5px; justify-content: center; }
         .cell { width: 90px; height: 90px; background: #333; font-size: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 8px; font-weight: bold; }
         .memo-grid { display: grid; grid-template-columns: repeat(4, 60px); gap: 8px; justify-content: center; }
@@ -21,6 +21,18 @@
         .tile-row { display: flex; justify-content: center; }
         .tile { width: 60px; height: 80px; border: 1px solid #333; background: white; cursor: pointer; }
         .tile.black { background: black; }
+        .mobile-btn { min-width: 75px; padding: 13px 12px !important; font-size: 15px !important; margin: 3px; }
+        .action-btn { background:#ff007f !important; color:white !important; border-color:#ff007f !important; }
+        @media (max-width: 380px) {
+            body { padding: 5px; }
+            .game-section { padding: 10px; }
+            canvas { max-width: 100%; height: auto; }
+            .board { grid-template-columns: repeat(3, 75px); }
+            .cell { width: 75px; height: 75px; }
+            .memo-grid { grid-template-columns: repeat(4, 52px); gap: 6px; }
+            .memo-card { width: 52px; height: 52px; }
+            .tile { width: 52px; height: 70px; }
+        }
     </style>
 </head>
 <body>
@@ -38,6 +50,8 @@
         <button id="b8" class="btn" onclick="showGame('g8','b8')">🐸 Frogger</button>
         <button id="b9" class="btn" onclick="showGame('g9','b9')">🎵 Tiles</button>
         <button id="b10" class="btn" onclick="showGame('g10','b10')">🧮 Math</button>
+        <button id="b11" class="btn" onclick="showGame('g11','b11')">🥷 Ninja Run</button>
+        <button id="b12" class="btn" onclick="showGame('g12','b12')">💣 Dodge</button>
     </div>
 
     <!-- 1. TIC TAC TOE -->
@@ -61,7 +75,7 @@
     <div id="g4" class="game-section"><h2>🧩 Memory Match</h2><div class="memo-grid" id="memoGrid"></div><p id="memoScore" style="margin-top:10px;"></p></div>
 
     <!-- 5. BRICK BREAKER -->
-    <div id="g5" class="game-section"><h2>🧱 Brick Breaker</h2><canvas id="brickCanvas" width="300" height="300"></canvas><button class="btn" onclick="initBricks()">Restart</button></div>
+    <div id="g5" class="game-section"><h2>🧱 Brick Breaker</h2><canvas id="brickCanvas" width="300" height="300"></canvas><p id="brickScore">स्कोर: 0</p><button class="btn" onclick="initBricks()">Restart</button></div>
 
     <!-- 6. PING PONG -->
     <div id="g6" class="game-section"><h2>🏓 Ping Pong Match</h2><canvas id="pongCanvas" width="300" height="300"></canvas><p id="pongScore">प्लेयर: 0 | कंप्यूटर: 0</p></div>
@@ -78,11 +92,60 @@
     <!-- 10. MATH RUN -->
     <div id="g10" class="game-section"><h2>🧮 Math Quiz Speedrun</h2><h3 id="mathQ">2 + 2 = ?</h3><input type="number" id="mathIn" placeholder="उत्तर दें"><br><br><button class="btn" onclick="checkMath()">Submit</button><p id="mathScore" style="margin-top:10px;">स्कोर: 0</p></div>
 
-    <!-- मोबाइल और फोन के लिए टच कंट्रोल बटन्स -->
-    <div id="mobileControls" style="margin-top:15px; display:none;">
-        <button class="btn" style="padding:15px 25px; font-size:18px;" onclick="triggerKey(37)">◀ Left</button>
-        <button class="btn" style="padding:15px 25px; font-size:18px; background:#ff007f; color:white;" onclick="triggerKey(32)">▲ Jump / Shoot</button>
-        <button class="btn" style="padding:15px 25px; font-size:18px;" onclick="triggerKey(39)">Right ▶</button>
+    <!-- 11. NINJA RUN -->
+    <div id="g11" class="game-section">
+        <h2>🥷 Ninja Run</h2>
+        <canvas id="ninjaCanvas" width="300" height="300"></canvas>
+        <p id="ninjaScore">स्कोर: 0</p>
+        <button class="btn" onclick="initNinja()">Restart</button>
+    </div>
+
+    <!-- 12. DODGE GAME -->
+    <div id="g12" class="game-section">
+        <h2>💣 Dodge Game</h2>
+        <canvas id="dodgeCanvas" width="300" height="300"></canvas>
+        <p id="dodgeScore">स्कोर: 0</p>
+        <button class="btn" onclick="initDodge()">Restart</button>
+    </div>
+
+    <!-- हर गेम के लिए अलग मोबाइल कंट्रोल -->
+    <div id="mobileControls" style="margin-top:15px; display:none; touch-action:manipulation;">
+        <div id="controls-g2" class="game-controls" style="display:none;justify-content:center;gap:8px;flex-wrap:wrap;">
+            <button class="btn mobile-btn" ontouchstart="mobilePress(37)" onmousedown="mobilePress(37)">◀ Left</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(38)" onmousedown="mobilePress(38)">▲ Up</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(39)" onmousedown="mobilePress(39)">Right ▶</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(40)" onmousedown="mobilePress(40)">▼ Down</button>
+        </div>
+        <div id="controls-g3" class="game-controls" style="display:none;justify-content:center;gap:8px;flex-wrap:wrap;">
+            <button class="btn mobile-btn" ontouchstart="mobilePress(37)" onmousedown="mobilePress(37)">◀ Left</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(39)" onmousedown="mobilePress(39)">Right ▶</button>
+        </div>
+        <div id="controls-g5" class="game-controls" style="display:none;justify-content:center;gap:8px;flex-wrap:wrap;">
+            <button class="btn mobile-btn" ontouchstart="mobilePress(37)" onmousedown="mobilePress(37)">◀ Left</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(39)" onmousedown="mobilePress(39)">Right ▶</button>
+        </div>
+        <div id="controls-g6" class="game-controls" style="display:none;justify-content:center;gap:8px;flex-wrap:wrap;">
+            <button class="btn mobile-btn" ontouchstart="mobilePress(38)" onmousedown="mobilePress(38)">▲ Up</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(40)" onmousedown="mobilePress(40)">▼ Down</button>
+        </div>
+        <div id="controls-g7" class="game-controls" style="display:none;justify-content:center;gap:8px;flex-wrap:wrap;">
+            <button class="btn mobile-btn" ontouchstart="mobilePress(37)" onmousedown="mobilePress(37)">◀ Left</button>
+            <button class="btn mobile-btn action-btn" ontouchstart="mobilePress(32)" onmousedown="mobilePress(32)">🚀 Shoot</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(39)" onmousedown="mobilePress(39)">Right ▶</button>
+        </div>
+        <div id="controls-g11" class="game-controls" style="display:none;justify-content:center;gap:8px;flex-wrap:wrap;">
+            <button class="btn mobile-btn action-btn" ontouchstart="mobilePress(32)" onmousedown="mobilePress(32)">🥷 Jump</button>
+        </div>
+        <div id="controls-g12" class="game-controls" style="display:none;justify-content:center;gap:8px;flex-wrap:wrap;">
+            <button class="btn mobile-btn" ontouchstart="mobilePress(37)" onmousedown="mobilePress(37)">◀ Left</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(39)" onmousedown="mobilePress(39)">Right ▶</button>
+        </div>
+        <div id="controls-g8" class="game-controls" style="display:none;justify-content:center;gap:8px;flex-wrap:wrap;">
+            <button class="btn mobile-btn" ontouchstart="mobilePress(38)" onmousedown="mobilePress(38)">▲ Up</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(37)" onmousedown="mobilePress(37)">◀ Left</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(40)" onmousedown="mobilePress(40)">▼ Down</button>
+            <button class="btn mobile-btn" ontouchstart="mobilePress(39)" onmousedown="mobilePress(39)">Right ▶</button>
+        </div>
     </div>
     <script>
         let sInt, cInt, turn='X', cells=Array(9).fill(''), gAct=true, sd="RIGHT";
@@ -90,8 +153,19 @@
         let mQ=0, mA=0, mSc=0;
 
         // --- असली साँप के सिर की इमेज लोड करना ---
-        const snakeHeadImg = new Image();
-        snakeHeadImg.src = "https://ibb.co";
+        const snakeHeadImg = null;
+
+        function showGameControls(id) {
+            const wrap = document.getElementById('mobileControls');
+            document.querySelectorAll('.game-controls').forEach(c => c.style.display = 'none');
+            const controls = document.getElementById('controls-' + id);
+            if (controls) {
+                wrap.style.display = 'block';
+                controls.style.display = 'flex';
+            } else {
+                wrap.style.display = 'none';
+            }
+        }
 
         function showGame(id, bId) {
             document.querySelectorAll('.game-section').forEach(g=>g.style.display='none');
@@ -99,23 +173,95 @@
             let el=document.getElementById(id); if(el) el.style.display='block';
             let btn=document.getElementById(bId); if(btn) btn.classList.add('active');
             
-            // एक्शन गेम्स में मोबाइल बटन्स दिखाना
-            if(['g2','g3','g6','g7','g8'].includes(id)) {
-                document.getElementById('mobileControls').style.display = 'block';
-            } else {
-                document.getElementById('mobileControls').style.display = 'none';
-            }
+            // सिर्फ उसी गेम के मोबाइल कंट्रोल दिखाएं
+            showGameControls(id);
 
-            clearInterval(sInt); clearInterval(cInt); clearInterval(bInt); clearInterval(pongInt); clearInterval(spaceInt); clearInterval(frogInt);
+            clearInterval(sInt); clearInterval(cInt); clearInterval(bInt); clearInterval(pongInt); clearInterval(spaceInt); clearInterval(frogInt); clearInterval(ninjaInt); clearInterval(dodgeInt);
             if(id==='g2') initS(); if(id==='g3') initC(); if(id==='g4') initMemo(); 
             if(id==='g5') initBricks(); if(id==='g6') initPong(); if(id==='g7') initSpace();
-            if(id==='g8') initFrog(); if(id==='g9') initTiles(); if(id==='g10') nextMath();
+            if(id==='g8') initFrog(); if(id==='g9') initTiles(); if(id==='g10') { mSc=0; document.getElementById('mathScore').innerText='स्कोर: 0'; nextMath(); }
+            if(id==='g11') initNinja(); if(id==='g12') initDodge();
+        }
+
+        function mobilePress(code) {
+            // Directly control the currently active game; this avoids mobile
+            // browsers dropping synthetic keyboard events.
+            const active = document.querySelector('.game-section[style*="display: block"]');
+            if(!active) return;
+
+            if(active.id==="g2") {
+                if(code===37 && sd!=="RIGHT") sd="LEFT";
+                if(code===38 && sd!=="DOWN") sd="UP";
+                if(code===39 && sd!=="LEFT") sd="RIGHT";
+                if(code===40 && sd!=="UP") sd="DOWN";
+            } else if(active.id==="g3") {
+                if(code===37) pCar.x=Math.max(10,pCar.x-20);
+                if(code===39) pCar.x=Math.min(240,pCar.x+20);
+            } else if(active.id==="g5") {
+                if(code===37) paddle.x=Math.max(0,paddle.x-25);
+                if(code===39) paddle.x=Math.min(300-paddle.w,paddle.x+25);
+            } else if(active.id==="g6") {
+                if(code===38) p1Y=Math.max(10,p1Y-20);
+                if(code===40) p1Y=Math.min(230,p1Y+20);
+            } else if(active.id==="g7") {
+                if(code===37) sShipX=Math.max(10,sShipX-20);
+                if(code===39) sShipX=Math.min(260,sShipX+20);
+                if(code===32) lasers.push({x:sShipX+12,y:315});
+            } else if(active.id==="g8") {
+                if(code===37) frog.x=Math.max(10,frog.x-20);
+                if(code===39) frog.x=Math.min(270,frog.x+20);
+                if(code===38) frog.y=Math.max(10,frog.y-20);
+                if(code===40) frog.y=Math.min(270,frog.y+20);
+            } else if(active.id==="g11") {
+                if(code===32 || code===38) ninjaJump();
+            } else if(active.id==="g12") {
+                if(code===37) dodgePlayer.x=Math.max(10,dodgePlayer.x-20);
+                if(code===39) dodgePlayer.x=Math.min(260,dodgePlayer.x+20);
+            }
         }
 
         function triggerKey(code) {
-            let fakeEvent = { keyCode: code, preventDefault: function() {} };
-            document.dispatchEvent(new KeyboardEvent('keydown', fakeEvent));
+            const keyMap = {37:"ArrowLeft", 38:"ArrowUp", 39:"ArrowRight", 40:"ArrowDown", 32:" "};
+            const key = keyMap[code] || "";
+            const ev = new KeyboardEvent("keydown", {
+                key: key,
+                code: key === " " ? "Space" : key,
+                bubbles: true,
+                cancelable: true
+            });
+
+            // Some mobile browsers do not allow keyCode to be set on KeyboardEvent,
+            // so call the active document handler with a normalized event too.
+            try {
+                Object.defineProperty(ev, "keyCode", { get: () => code });
+                Object.defineProperty(ev, "which", { get: () => code });
+            } catch (_) {}
+
+            if (typeof document.onkeydown === "function") {
+                document.onkeydown(ev);
+            }
+            document.dispatchEvent(ev);
         }
+
+        // Mobile touch/swipe controls for action games.
+        document.querySelectorAll("canvas").forEach(canvas => {
+            let sx=0, sy=0;
+            canvas.addEventListener("touchstart", e => {
+                const t=e.touches[0]; sx=t.clientX; sy=t.clientY;
+                e.preventDefault();
+            }, {passive:false});
+            canvas.addEventListener("touchend", e => {
+                const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy;
+                e.preventDefault();
+                if(Math.abs(dx)<20 && Math.abs(dy)<20) {
+                    // Tap = shoot/action for shooter, otherwise no accidental move.
+                    if(canvas.id==="spaceCanvas") triggerKey(32);
+                    return;
+                }
+                if(Math.abs(dx)>Math.abs(dy)) triggerKey(dx>0?39:37);
+                else triggerKey(dy>0?40:38);
+            }, {passive:false});
+        });
 
         // --- 1. Tic Tac Toe ---
         function makeMove(el, n) {
@@ -134,14 +280,16 @@
             clearInterval(sInt); sd="RIGHT"; const cv=document.getElementById('stage'), cx=cv.getContext('2d'), b=15;
             let snake=[{x:150,y:150}], score=0, food={x:75,y:75};
             document.onkeydown=e=>{
-                if(e.keyCode==37 && sd!="RIGHT") sd="LEFT"; if(e.keyCode==38 && sd!="DOWN") sd="UP";
-                if(e.keyCode==39 && sd!="LEFT") sd="RIGHT"; if(e.keyCode==40 && sd!="UP") sd="DOWN";
+                if((e.keyCode==37 || e.key==="ArrowLeft") && sd!="RIGHT") sd="LEFT";
+                if((e.keyCode==38 || e.key==="ArrowUp") && sd!="DOWN") sd="UP";
+                if((e.keyCode==39 || e.key==="ArrowRight") && sd!="LEFT") sd="RIGHT";
+                if((e.keyCode==40 || e.key==="ArrowDown") && sd!="UP") sd="DOWN";
             };
             sInt=setInterval(()=>{
                 cx.fillStyle='#000'; cx.fillRect(0,0,300,300);
                 for(let i=0; i<snake.length; i++) { 
-                    if(i === 0) { cx.drawImage(snakeHeadImg, snake[i].x, snake[i].y, b, b); } 
-                    else { cx.fillStyle='#00ff00'; cx.fillRect(snake[i].x, snake[i].y, b-1, b-1); }
+                    if(i === 0) { cx.fillStyle="#00ff00"; cx.fillRect(snake[i].x, snake[i].y, b-1, b-1); cx.fillStyle="#000"; cx.fillRect(snake[i].x+3, snake[i].y+3, 2, 2); cx.fillRect(snake[i].x+9, snake[i].y+3, 2, 2); } 
+                    else { cx.fillStyle="#00ff00"; cx.fillRect(snake[i].x, snake[i].y, b-1, b-1); }
                 }
                 cx.fillStyle='red'; cx.fillRect(food.x, food.y, b-1, b-1);
                 let nX=snake[0].x, nY=snake[0].y; if(sd=="LEFT") nX-=b; if(sd=="UP") nY-=b; if(sd=="RIGHT") nX+=b; if(sd=="DOWN") nY+=b;
@@ -153,7 +301,10 @@
 
         // --- 3. Jaguar Car Game ---
         function drawJaguar(cx,x,y,isP) { cx.fillStyle=isP?"#1a1a24":"#e53935"; cx.fillRect(x,y,44,65); cx.fillStyle="#111"; cx.fillRect(x+6,y+42,32,18); cx.fillStyle="#fff"; cx.fillRect(x+4,y+38,8,3); cx.fillRect(x+32,y+38,8,3); cx.fillStyle="#223"; cx.fillRect(x+5,y+12,34,18); }
-        document.addEventListener('keydown', e=>{ if(e.keyCode==37 && pCar.x>10) pCar.x-=20; if(e.keyCode==39 && pCar.x<240) pCar.x+=20; });
+        document.addEventListener('keydown', e=>{
+            if((e.keyCode==37 || e.key==="ArrowLeft") && pCar.x>10) pCar.x-=20;
+            if((e.keyCode==39 || e.key==="ArrowRight") && pCar.x<240) pCar.x+=20;
+        });
         function initC() {
             clearInterval(cInt); pCar.x=130; eCar.y=-70; eCar.x=Math.floor(Math.random()*220)+10; eCar.speed=5; cScore=0; document.getElementById('cSc').innerText="स्कोर: "+cScore;
             cInt=setInterval(()=>{
@@ -185,42 +336,131 @@
             if(pickedCards[0].dataset.emoji === pickedCards[1].dataset.emoji) { matchedCount += 2; pickedCards = []; if(matchedCount === 16) document.getElementById('memoScore').innerText = "🎉 जीत गए!"; }
             else { setTimeout(()=>{ pickedCards[0].classList.remove('flipped'); pickedCards[0].innerText = ''; pickedCards[1].classList.remove('flipped'); pickedCards[1].innerText = ''; pickedCards = []; }, 200); }
         }
-        // --- 5. Brick Breaker Game ---
-        let bInt, ball={x:150,y:200,dx:2,dy:-2,r:7}, paddle={x:120,w:60,h:10}, bricks=[], brickRows=3, brickCols=5;
+        // --- 5. Brick Breaker Game (Mobile Touch Fixed) ---
+        let bInt, ball={x:150,y:245,dx:3,dy:-3,r:7}, paddle={x:120,w:70,h:10}, bricks=[], brickRows=4, brickCols=5, brickScore=0;
+
         function initBricks() {
-            clearInterval(bInt); const cv=document.getElementById('brickCanvas'), cx=cv.getContext('2d');
-            ball.x=150; ball.y=240; ball.dx=2; ball.dy=-2; paddle.x=120; bricks=[];
-            for(let c=0; c<brickCols; c++) { bricks[c] = []; for(let r=0; r<brickRows; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
-            document.onkeydown = e => { if(e.keyCode == 37 && paddle.x > 0) paddle.x -= 15; if(e.keyCode == 39 && paddle.x < 240) paddle.x += 15; };
-            bInt = setInterval(() => {
-                cx.clearRect(0, 0, 300, 300);
-                cx.fillStyle = "#ff007f"; cx.beginPath(); cx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2); cx.fill();
-                cx.fillStyle = "#00ffff"; cx.fillRect(paddle.x, 280, paddle.w, paddle.h);
-                for(let c=0; c<brickCols; c++) {
-                    for(let r=0; r<brickRows; r++) {
-                        if(bricks[c][r].status == 1) {
-                            let bX = (c*55)+15, bY = (r*20)+30; bricks[c][r].x = bX; bricks[c][r].y = bY;
-                            cx.fillStyle = "#ffd700"; cx.fillRect(bX, bY, 50, 15);
-                            if(ball.x > bX && ball.x < bX+50 && ball.y > bY && ball.y < bY+15) { ball.dy = -ball.dy; bricks[c][r].status = 0; }
-                        }
+            clearInterval(bInt);
+            const cv=document.getElementById('brickCanvas');
+            if(!cv) return;
+            const cx=cv.getContext('2d');
+
+            ball={x:150,y:245,dx:3,dy:-3,r:7};
+            paddle={x:115,w:70,h:10};
+            brickScore=0;
+            document.getElementById('brickScore').innerText="स्कोर: 0";
+            bricks=[];
+
+            for(let r=0;r<brickRows;r++){
+                for(let c=0;c<brickCols;c++){
+                    bricks.push({x:c*55+15,y:r*22+30,w:50,h:16,alive:true});
+                }
+            }
+
+            // Keyboard support
+            document.onkeydown = e => {
+                if(e.keyCode===37 || e.key==="ArrowLeft")
+                    paddle.x=Math.max(0,paddle.x-20);
+                if(e.keyCode===39 || e.key==="ArrowRight")
+                    paddle.x=Math.min(300-paddle.w,paddle.x+20);
+            };
+
+            // DIRECT PHONE TOUCH: move paddle exactly under the finger.
+            const moveFromTouch = e => {
+                const touch=e.touches[0] || e.changedTouches[0];
+                if(!touch) return;
+                const rect=cv.getBoundingClientRect();
+                const scaleX=cv.width/rect.width;
+                const x=(touch.clientX-rect.left)*scaleX;
+                paddle.x=Math.max(0,Math.min(cv.width-paddle.w,x-paddle.w/2));
+                e.preventDefault();
+            };
+
+            // Remove previous handlers before adding new ones.
+            if(cv._brickTouchMove) cv.removeEventListener("touchmove",cv._brickTouchMove);
+            if(cv._brickTouchStart) cv.removeEventListener("touchstart",cv._brickTouchStart);
+            cv._brickTouchMove=moveFromTouch;
+            cv._brickTouchStart=moveFromTouch;
+            cv.addEventListener("touchstart",moveFromTouch,{passive:false});
+            cv.addEventListener("touchmove",moveFromTouch,{passive:false});
+
+            bInt=setInterval(()=>{
+                cx.fillStyle="#000";
+                cx.fillRect(0,0,300,300);
+
+                bricks.forEach(br=>{
+                    if(br.alive){
+                        cx.fillStyle="#ffd700";
+                        cx.fillRect(br.x,br.y,br.w,br.h);
+                        cx.strokeStyle="#fff";
+                        cx.strokeRect(br.x,br.y,br.w,br.h);
+                    }
+                });
+
+                cx.fillStyle="#00ffff";
+                cx.fillRect(paddle.x,280,paddle.w,paddle.h);
+
+                cx.fillStyle="#ff007f";
+                cx.beginPath();
+                cx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
+                cx.fill();
+
+                ball.x+=ball.dx;
+                ball.y+=ball.dy;
+
+                if(ball.x-ball.r<=0){ ball.x=ball.r; ball.dx=Math.abs(ball.dx); }
+                if(ball.x+ball.r>=300){ ball.x=300-ball.r; ball.dx=-Math.abs(ball.dx); }
+                if(ball.y-ball.r<=0){ ball.y=ball.r; ball.dy=Math.abs(ball.dy); }
+
+                for(const br of bricks){
+                    if(!br.alive) continue;
+                    if(ball.x+ball.r>br.x && ball.x-ball.r<br.x+br.w &&
+                       ball.y+ball.r>br.y && ball.y-ball.r<br.y+br.h){
+                        br.alive=false;
+                        brickScore++;
+                        document.getElementById("brickScore").innerText="स्कोर: "+brickScore;
+                        ball.dy=-ball.dy;
+                        break;
                     }
                 }
-                ball.x += ball.dx; ball.y += ball.dy;
-                if(ball.x < ball.r || ball.x > 300-ball.r) ball.dx = -ball.dx;
-                if(ball.y < ball.r) ball.dy = -ball.dy;
-                else if(ball.y > 280-ball.r) {
-                    if(ball.x > paddle.x && ball.x < paddle.x + paddle.w) { ball.dy = -ball.dy; }
-                    else if(ball.y > 300) { clearInterval(bInt); alert("Game Over!"); initBricks(); }
+
+                // Paddle collision
+                if(ball.dy>0 && ball.y+ball.r>=280 &&
+                   ball.y+ball.r<=300 &&
+                   ball.x>=paddle.x && ball.x<=paddle.x+paddle.w){
+                    ball.y=280-ball.r;
+                    ball.dy=-Math.abs(ball.dy);
+                    const hit=(ball.x-(paddle.x+paddle.w/2))/(paddle.w/2);
+                    ball.dx=hit*5;
+                    if(Math.abs(ball.dx)<1) ball.dx=ball.dx<0?-1:1;
                 }
-            }, 20);
+
+                if(bricks.every(br=>!br.alive)){
+                    clearInterval(bInt);
+                    setTimeout(()=>{
+                        alert("🎉 जीत गए! स्कोर: "+brickScore);
+                        initBricks();
+                    },50);
+                    return;
+                }
+
+                if(ball.y-ball.r>300){
+                    clearInterval(bInt);
+                    setTimeout(()=>{
+                        alert("Game Over! स्कोर: "+brickScore);
+                        initBricks();
+                    },50);
+                }
+            },20);
         }
 
         // --- 6. Ping Pong Match ---
         let pongInt, p1Y=110, p2Y=110, pBall={x:150,y:150,dx:3,dy:2}, p1Sc=0, p2Sc=0;
         function initPong() {
             clearInterval(pongInt); const cv=document.getElementById('pongCanvas'), cx=cv.getContext('2d');
-            pBall={x:150,y:150,dx:3,dy:2}; p1Y=110; p2Y=110;
-            document.onkeydown = e => { if(e.keyCode == 38 && p1Y > 10) p1Y -= 15; if(e.keyCode == 40 && p1Y < 230) p1Y += 15; };
+            pBall={x:150,y:150,dx:(Math.random()<0.5?3:-3),dy:2}; p1Y=110; p2Y=110;
+            document.onkeydown = e => { if((e.keyCode == 38 || e.key==="ArrowUp") && p1Y > 10) p1Y -= 15;
+                if((e.keyCode == 40 || e.key==="ArrowDown") && p1Y < 230) p1Y += 15; };
             pongInt = setInterval(() => {
                 cx.clearRect(0, 0, 300, 300);
                 cx.fillStyle = "#ffffff"; cx.fillRect(10, p1Y, 10, 60); cx.fillRect(280, p2Y, 10, 60);
@@ -241,9 +481,9 @@
             clearInterval(spaceInt); const cv=document.getElementById('spaceCanvas'), cx=cv.getContext('2d');
             sShipX=135; lasers=[]; stars=[]; let spScore=0;
             document.onkeydown = e => { 
-                if(e.keyCode == 37 && sShipX > 10) sShipX -= 15; 
-                if(e.keyCode == 39 && sShipX < 260) sShipX += 15; 
-                if(e.keyCode == 32) lasers.push({x:sShipX+12, y:315}); 
+                if((e.keyCode == 37 || e.key==="ArrowLeft") && sShipX > 10) sShipX -= 15;
+                if((e.keyCode == 39 || e.key==="ArrowRight") && sShipX < 260) sShipX += 15;
+                if(e.keyCode == 32 || e.key===" ") lasers.push({x:sShipX+12, y:315}); 
             };
             spaceInt = setInterval(() => {
                 cx.clearRect(0,0,300,350);
@@ -265,8 +505,10 @@
             clearInterval(frogInt); const cv=document.getElementById('frogCanvas'), cx=cv.getContext('2d');
             frog={x:140,y:270}; frScore=0; document.getElementById('frogScore').innerText="स्कोर: 0";
             document.onkeydown = e => {
-                if(e.keyCode == 37 && frog.x > 10) frog.x -= 20; if(e.keyCode == 39 && frog.x < 270) frog.x += 20;
-                if(e.keyCode == 38 && frog.y > 10) frog.y -= 20; if(e.keyCode == 40 && frog.y < 270) frog.y += 20;
+                if((e.keyCode == 37 || e.key==="ArrowLeft") && frog.x > 10) frog.x -= 20;
+                if((e.keyCode == 39 || e.key==="ArrowRight") && frog.x < 270) frog.x += 20;
+                if((e.keyCode == 38 || e.key==="ArrowUp") && frog.y > 10) frog.y -= 20;
+                if((e.keyCode == 40 || e.key==="ArrowDown") && frog.y < 270) frog.y += 20;
             };
             frogInt = setInterval(() => {
                 cx.clearRect(0,0,300,300);
@@ -278,6 +520,68 @@
                 });
                 if(frog.y < 30) { frScore++; document.getElementById('frogScore').innerText="स्कोर: "+frScore; frog.y=270; }
             }, 30);
+        }
+
+        // --- 11. Ninja Run ---
+        let ninjaInt, ninjaY=245, ninjaV=0, ninjaScore=0, ninjaObs=[];
+        function ninjaJump() {
+            if(ninjaY>=245) ninjaV=-10;
+        }
+        function initNinja() {
+            clearInterval(ninjaInt);
+            const cv=document.getElementById('ninjaCanvas'), cx=cv.getContext('2d');
+            ninjaY=245; ninjaV=0; ninjaScore=0; ninjaObs=[];
+            document.getElementById('ninjaScore').innerText="स्कोर: 0";
+            document.onkeydown=e=>{
+                if(e.key===" " || e.key==="ArrowUp" || e.keyCode===32 || e.keyCode===38) ninjaJump();
+            };
+            ninjaInt=setInterval(()=>{
+                cx.fillStyle="#111"; cx.fillRect(0,0,300,300);
+                cx.fillStyle="#333"; cx.fillRect(0,270,300,30);
+                ninjaV+=0.5; ninjaY+=ninjaV;
+                if(ninjaY>245){ninjaY=245;ninjaV=0;}
+                if(Math.random()<0.025) ninjaObs.push({x:300,w:18,h:25});
+                ninjaObs.forEach(o=>o.x-=5);
+                ninjaObs=ninjaObs.filter(o=>o.x>-30);
+                cx.fillStyle="#222"; cx.fillRect(40,ninjaY,25,25);
+                cx.fillStyle="#00ffff"; cx.fillRect(47,ninjaY+5,4,4); cx.fillRect(56,ninjaY+5,4,4);
+                cx.fillStyle="#ff007f"; ninjaObs.forEach(o=>cx.fillRect(o.x,245,o.w,o.h));
+                ninjaObs.forEach(o=>{
+                    if(40<o.x+o.w && 65>o.x && ninjaY<245+o.h && ninjaY+25>245){
+                        clearInterval(ninjaInt); alert("Game Over! स्कोर: "+ninjaScore); initNinja();
+                    }
+                });
+                ninjaScore++; document.getElementById('ninjaScore').innerText="स्कोर: "+ninjaScore;
+            },30);
+        }
+
+        // --- 12. Dodge Game ---
+        let dodgeInt, dodgePlayer={x:135,y:260}, dodgeBlocks=[], dodgeScore=0;
+        function initDodge() {
+            clearInterval(dodgeInt);
+            const cv=document.getElementById('dodgeCanvas'), cx=cv.getContext('2d');
+            dodgePlayer={x:135,y:260}; dodgeBlocks=[]; dodgeScore=0;
+            document.getElementById('dodgeScore').innerText="स्कोर: 0";
+            document.onkeydown=e=>{
+                if(e.keyCode===37 || e.key==="ArrowLeft") dodgePlayer.x=Math.max(10,dodgePlayer.x-20);
+                if(e.keyCode===39 || e.key==="ArrowRight") dodgePlayer.x=Math.min(260,dodgePlayer.x+20);
+            };
+            dodgeInt=setInterval(()=>{
+                cx.fillStyle="#000"; cx.fillRect(0,0,300,300);
+                if(Math.random()<0.04) dodgeBlocks.push({x:Math.random()*270,y:-20,s:18});
+                dodgeBlocks.forEach(b=>b.y+=4);
+                dodgeBlocks=dodgeBlocks.filter(b=>b.y<320);
+                cx.fillStyle="#00ffff"; cx.fillRect(dodgePlayer.x,dodgePlayer.y,30,20);
+                cx.fillStyle="#ff007f";
+                dodgeBlocks.forEach(b=>cx.fillRect(b.x,b.y,b.s,b.s));
+                for(const b of dodgeBlocks){
+                    if(dodgePlayer.x<b.x+b.s && dodgePlayer.x+30>b.x &&
+                       dodgePlayer.y<b.y+b.s && dodgePlayer.y+20>b.y){
+                        clearInterval(dodgeInt); alert("Game Over! स्कोर: "+dodgeScore); initDodge(); return;
+                    }
+                }
+                dodgeScore++; document.getElementById('dodgeScore').innerText="स्कोर: "+dodgeScore;
+            },30);
         }
 
         // --- 9. Piano Tiles ---
@@ -311,6 +615,8 @@
             else { alert("गलत जवाब! सही उत्तर " + mA); mSc=0; document.getElementById('mathScore').innerText="स्कोर: 0"; }
             document.getElementById('mathIn').value = ''; nextMath();
         }
+        // Start with the first game visible.
+        showGame('g1', 'b1');
     </script>
 </body>
 </html>
